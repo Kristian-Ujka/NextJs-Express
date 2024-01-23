@@ -1,27 +1,34 @@
 import React, { ChangeEvent, useState } from "react";
 import style from "./LoginForm.module.css";
-import { Box, TextField } from "@mui/material";
+import { Box, Button, TextField } from "@mui/material";
 import Link from "next/link";
+import { useAuth } from "../AuthProvider/AuthProvider";
 
 const LoginForm = () => {
-  const [username, setUsername] = useState<string | undefined>();
-  const [password, setPassword] = useState<string | undefined>();
+  const { login } = useAuth();
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
 
-  const handleUsername = (e: ChangeEvent<HTMLInputElement>) => {
-    setUsername(e.target.value);
+  const handleLogin = async () => {
+    await login(username, password);
   };
-  const handlePassword = (e: ChangeEvent<HTMLInputElement>) => {
-    setPassword(e.target.value);
-  };
+
   return (
-    <Box height="100%" component="div">
+    <Box
+      height="100%"
+      component="div"
+      display="flex"
+      flexDirection="column"
+      justifyContent="center"
+      alignItems="center"
+    >
       <form className={style.formContainer}>
         <TextField
           id="outlined-basic"
           label="Username"
           variant="outlined"
           value={username}
-          onChange={handleUsername}
+          onChange={(e) => setUsername(e.target.value)}
         />
 
         <TextField
@@ -29,8 +36,16 @@ const LoginForm = () => {
           label="Password"
           variant="outlined"
           value={password}
-          onChange={handlePassword}
+          onChange={(e) => setPassword(e.target.value)}
         />
+
+        <Button
+          variant="contained"
+          disabled={!username || !password ? true : false}
+          onClick={handleLogin}
+        >
+          Login
+        </Button>
       </form>
 
       <p>
