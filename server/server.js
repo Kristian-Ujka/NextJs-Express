@@ -36,6 +36,22 @@ app.post("/api/auth", (req, res) => {
   }
 });
 
+/* PER I TEST QUINDI SONO SOLO DI ESEMPIO */
+const users = [];
+
+// Endpoint per ottenere la lista degli utenti
+app.get("/api/users", (req, res) => {
+  res.status(200).json(users);
+});
+
+// Endpoint per creare un nuovo utente
+app.post("/api/users", (req, res) => {
+  const { username } = req.body;
+  const newUser = { id: users.length + 1, username };
+  users.push(newUser);
+  res.status(201).json(newUser);
+});
+
 app.get("/api/home", (req, res) => res.json({ message: "Hello World" }));
 
 app.listen(PORT, () => `Server started on port ${PORT}`);

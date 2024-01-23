@@ -1,13 +1,24 @@
-import React, { ChangeEvent, useState } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 import style from "./LoginForm.module.css";
-import { Box, Button, TextField } from "@mui/material";
+import { Box, Button, TextField, Typography } from "@mui/material";
 import Link from "next/link";
 import { useAuth } from "../AuthProvider/AuthProvider";
+import { useRouter } from "next/router";
 
 const LoginForm = () => {
-  const { login } = useAuth();
+  const { login, token } = useAuth();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const router = useRouter();
+
+  useEffect(() => {
+    // Verifica se il token esiste al momento del rendering del componente
+    if (token) {
+      // Se il token esiste, reindirizza alla pagina della dashboard
+      /* localStorage.removeItem("token"); */
+      router.push("/dashboard");
+    }
+  }, [token, router]);
 
   const handleLogin = async () => {
     await login(username, password);
@@ -40,18 +51,18 @@ const LoginForm = () => {
         />
 
         <Button
-          variant="contained"
-          disabled={!username || !password ? true : false}
+          variant="outlined"
+          disabled={!username || !password}
           onClick={handleLogin}
         >
           Login
         </Button>
       </form>
 
-      <p>
+      <Typography mt="30px" fontSize="14px">
         Se ancora non sei registrato, registrati cliccando{" "}
         <Link href="/sign-up">qui</Link>
-      </p>
+      </Typography>
     </Box>
   );
 };
